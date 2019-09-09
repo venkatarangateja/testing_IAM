@@ -25,7 +25,7 @@ def put_job_success(event):
     
 def put_job_failure(event):
     pipeline    =   boto3.client('codepipeline')
-    pipe_resp   =   pipeline.put_job_failure_result(jobId=event['CodePipeline.job']['id'])
+    pipe_resp   =   pipeline.put_job_failure_result(jobId=event['CodePipeline.job']['id']failureDetails={'type': 'JobFailed','message': 'jobfailed'})
 
 def lambda_handler(event,context):
     temp_folder = '/tmp/outputs.txt'
