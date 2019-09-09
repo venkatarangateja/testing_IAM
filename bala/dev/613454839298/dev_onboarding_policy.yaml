@@ -140,25 +140,7 @@ Resources:
                     - sts:AssumeRoleWithSAML 
                     Effect: Allow
                     Resource: arn:aws:iam::*:*
-                -    
-                    Action:
-                    - elasticache:AddTagsToResource
-                    - elasticache:CreateCacheCluster
-                    - elasticache:CreateCacheParameterGroup
-                    - elasticache:CreateCacheSecurityGroup
-                    - elasticache:CreateCacheSubnetGroup
-                    - elasticache:CreateReplicationGroup
-                    - elasticache:CreateSnapshot
-                    - elasticache:DescribeSnapshots
-                    - elasticache:IncreaseReplicaCount
-                    - elasticache:ModifyCacheCluster
-                    - elasticache:ModifyCacheSubnetGroup
-                    - elasticache:ModifyReplicationGroup
-                    - elasticache:DeleteCacheCluster
-                    - elasticache:DeleteReplicationGroup
-                    - elasticache:DeleteSnapshot 
-                    Effect: Allow
-                    Resource: "*"
+
 
                 -    
                     Action: 
