@@ -43,7 +43,7 @@ def lambda_handler(event,context):
                     print('the error is:',e)
             else:
                 try:
-                    cft_response = sess_client.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
+                    cft_response = session_token.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
                     print cft_response
                     pipe_resp=pipeline.put_job_success_result(jobId=event['CodePipeline.job']['id'])
                 except Exception, e:
