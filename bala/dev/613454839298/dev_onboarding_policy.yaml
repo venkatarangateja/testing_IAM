@@ -133,15 +133,7 @@ Resources:
                     - s3:DeleteObjectVersion
                     Effect: Allow
                     Resource: arn:aws:s3:::*
-                -    
-                    Action:
-                    - lambda:CreateFunction
-                    - lambda:InvokeFunction
-                    - lambda:ListFunctions
-                    - lambda:UpdateFunctionCode
-                    - lambda:UpdateFunctionConfiguration
-                    Effect: Allow
-                    Resource: arn:aws:lambda:us-east-1:*:*:*
+
                 -    
                     Action:
                     - sts:AssumeRole
