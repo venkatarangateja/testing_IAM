@@ -19,11 +19,11 @@ def init_session(accounts,acc_ids):
 	#stack_resp  = sess_client.describe_stacks()['Stacks']
 	return sess_client
 
-def put_job_success():
+def put_job_success(event):
     pipeline    =   boto3.client('codepipeline')
     pipe_resp   =   pipeline.put_job_success_result(jobId=event['CodePipeline.job']['id'])
     
-def put_job_failure():
+def put_job_failure(event):
     pipeline    =   boto3.client('codepipeline')
     pipe_resp   =   pipeline.put_job_failure_result(jobId=event['CodePipeline.job']['id'])
 
@@ -45,17 +45,17 @@ def lambda_handler(event,context):
                 try:
                     cft_response = session_token.create_stack(StackName=stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
                     print cft_response
-                    put_job_success()
+                    put_job_success(event)
                 except Exception, e:
                     print('the stack {} in account {} already exists:'.format(stack_name,acc_ids),e)
-                    put_job_failure
+                    put_job_failure(event)
                     
             else:
                 try:
                     cft_response = session_token.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
                     print cft_response
-                    put_job_success()
+                    put_job_success(event)
                 except Exception, e:
                     print('the template in account {} is not updated:'.format(acc_ids),e)
-                    put_job_failure()
+                    put_job_failure(event)
                      
