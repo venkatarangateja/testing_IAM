@@ -48,6 +48,7 @@ def lambda_handler(event,context):
                     put_job_success(event)
                 except Exception, e:
                     print('the stack {} in account {} already exists:'.format(stack_name,acc_ids),e)
+                    put_job_failure(event)
                  
                         
             else:
@@ -57,5 +58,5 @@ def lambda_handler(event,context):
                     put_job_success(event)
                 except Exception, e:
                     print('the template in account {} is not updated:'.format(acc_ids),e)
-                    
+                    put_job_failure(event)
                      
