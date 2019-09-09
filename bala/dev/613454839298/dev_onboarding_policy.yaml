@@ -1,0 +1,229 @@
+
+Parameters:
+  AccountAlias:
+    Description: Enter your account alias name
+    Type: String
+Resources:
+    DevopsBotRole:
+        Type: AWS::IAM::Role
+        Properties:
+          RoleName:
+            Fn::Join:
+            - ''
+            - - AWS_
+              - Ref: AccountAlias
+              - _DevopsBot_
+              - Ref: AWS::AccountId
+          AssumeRolePolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - "ec2.amazonaws.com"
+              Action:
+                  - "sts:AssumeRole"
+            - Effect: Allow
+              Principal:
+                AWS:
+                  - arn:aws:iam::666665886686:root
+              Action:
+                - "sts:AssumeRole"
+          Policies:
+          - PolicyName: DevopsBot_policy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                -
+                    Action:
+                    - ec2:AssignPrivateIpAddresses
+                    - ec2:AssociateAddress
+                    - ec2:AssociateIamInstanceProfile
+                    - ec2:AssociateRouteTable
+                    - ec2:AssociateSubnetCidrBlock
+                    - ec2:AssociateTransitGatewayRouteTable
+                    - ec2:AssociateVpcCidrBlock
+                    - ec2:AttachClassicLinkVpc
+                    - ec2:AttachInternetGateway
+                    - ec2:AttachNetworkInterface
+                    - ec2:AttachVolume
+                    - ec2:AttachVpnGateway
+                    - ec2:AuthorizeClientVpnIngress
+                    - ec2:AuthorizeSecurityGroupIngress
+                    - ec2:CreateDefaultSubnet
+                    - ec2:CreateDefaultVpc
+                    - ec2:CreateImage
+                    - ec2:CreateInternetGateway
+                    - ec2:CreateKeyPair
+                    - ec2:CreateNatGateway
+                    - ec2:CreateNetworkInterface
+                    - ec2:CreateNetworkInterfacePermission
+                    - ec2:CreatePlacementGroup
+                    - ec2:CreateRouteTable
+                    - ec2:CreateSecurityGroup
+                    - ec2:CreateSnapshots
+                    - ec2:CreateSubnet
+                    - ec2:CreateTags
+                    - ec2:CreateTransitGateway
+                    - ec2:CreateVolume
+                    - ec2:DisassociateAddress
+                    Effect: Allow
+                    Resource: arn:aws:ec2:us-east-1:*:*
+                    Condition:
+                      StringEquals:
+                        ec2:Region:
+                        - us-east-1
+                -        
+                    Effect: Allow
+                    Action:
+                    - ec2:DetachVolume
+                    - ec2:AttachVolume
+                    - ec2:RebootInstances
+                    - ec2:AttachClassicLinkVpc
+                    - ec2:DisassociateIamInstanceProfile
+                    - ec2:AssociateIamInstanceProfile
+                    Resource: arn:aws:ec2:us-east-1:*:*
+                    Condition:
+                      StringLike:
+                        ec2:InstanceType:
+                        - "*.nano"
+                        - "*.small"
+                        - "*.micro"
+                        - "*.medium"
+                        - t2.large
+                -        
+                    Action:
+                    - iam:AddRoleToInstanceProfile
+                    - iam:AttachRolePolicy
+                    - iam:CreateInstanceProfile
+                    - iam:CreatePolicy
+                    - iam:CreateRole
+                    - iam:UpdateAssumeRolePolicy
+                    - iam:DeletePolicy
+                    - iam:DeleteRole
+                    - iam:DetachRolePolicy
+                    Effect: Allow
+                    Resource: arn:aws:iam::*:*
+                -    
+                    Action:
+                    - elasticloadbalancing:AddTags
+                    - elasticloadbalancing:ApplySecurityGroupsToLoadBalancer
+                    - elasticloadbalancing:AttachLoadBalancerToSubnets
+                    - elasticloadbalancing:ConfigureHealthCheck
+                    - elasticloadbalancing:CreateLoadBalancer
+                    - elasticloadbalancing:CreateLoadBalancerListeners
+                    - elasticloadbalancing:SetLoadBalancerListenerSSLCertificate
+                    - elasticloadbalancing:SetLoadBalancerPoliciesOfListener
+                    - elasticloadbalancing:DeleteLoadBalancer
+                    - elasticloadbalancing:DeleteRule
+                    Effect: Allow
+                    Resource: arn:aws:elasticloadbalancing:us-east-1:*:*
+                -    
+                    Action:
+                    - s3:CreateBucket
+                    - s3:ListAllMyBuckets
+                    - s3:ListBucket
+                    - s3:PutBucketPolicy
+                    - s3:PutEncryptionConfiguration
+                    - s3:PutObject
+                    - s3:PutObjectTagging
+                    - s3:DeleteBucket
+                    - s3:DeleteBucketPolicy
+                    - s3:DeleteObject
+                    - s3:DeleteObjectVersion
+                    Effect: Allow
+                    Resource: arn:aws:s3:::*
+                -    
+                    Action:
+                    - lambda:CreateFunction
+                    - lambda:InvokeFunction
+                    - lambda:ListFunctions
+                    - lambda:UpdateFunctionCode
+                    - lambda:UpdateFunctionConfiguration
+                    Effect: Allow
+                    Resource: arn:aws:lambda:us-east-1:*:*:*
+                -    
+                    Action:
+                    - sts:AssumeRole
+                    - sts:AssumeRoleWithSAML 
+                    Effect: Allow
+                    Resource: arn:aws:iam::*:*
+                -    
+                    Action:
+                    - elasticache:AddTagsToResource
+                    - elasticache:CreateCacheCluster
+                    - elasticache:CreateCacheParameterGroup
+                    - elasticache:CreateCacheSecurityGroup
+                    - elasticache:CreateCacheSubnetGroup
+                    - elasticache:CreateReplicationGroup
+                    - elasticache:CreateSnapshot
+                    - elasticache:DescribeSnapshots
+                    - elasticache:IncreaseReplicaCount
+                    - elasticache:ModifyCacheCluster
+                    - elasticache:ModifyCacheSubnetGroup
+                    - elasticache:ModifyReplicationGroup
+                    - elasticache:DeleteCacheCluster
+                    - elasticache:DeleteReplicationGroup
+                    - elasticache:DeleteSnapshot 
+                    Effect: Allow
+                    Resource: "*"
+                -    
+                    Action:
+                    - ecs:CreateCluster
+                    - ecs:CreateService
+                    - ecs:CreateTaskSet
+                    - ecs:DeregisterContainerInstance
+                    - ecs:DeregisterTaskDefinition
+                    - ecs:DescribeClusters
+                    - ecs:ListClusters
+                    - ecs:ListContainerInstances
+                    - ecs:ListServices
+                    - ecs:ListTaskDefinitions
+                    - ecs:ListTasks
+                    - ecs:RegisterContainerInstance
+                    - ecs:RegisterTaskDefinition
+                    - ecs:RunTask
+                    - ecs:StartTask
+                    - ecs:StopTask
+                    - ecs:UpdateService
+                    - ecs:UpdateTaskSet
+                    - ecs:DeleteAttributes
+                    - ecs:DeleteCluster
+                    - ecs:DeleteService
+                    - ecs:DeleteTaskSet  
+                    Effect: Allow
+                    Resource: arn:aws:ecs:us-east-1:*:*
+                -    
+                    Action: 
+                    - eks:*    
+                    Effect: Allow
+                    Resource: arn:aws:eks:us-east-1:*:*
+                -    
+                    Action:
+                    - rds:AddRoleToDBCluster
+                    - rds:AddRoleToDBInstance
+                    - rds:CreateDBClusterSnapshot
+                    - rds:CreateDBInstance
+                    - rds:CreateDBInstanceReadReplica
+                    - rds:CreateDBSecurityGroup
+                    - rds:CreateDBSnapshot
+                    - rds:CreateDBSubnetGroup
+                    - rds:CreateEventSubscription
+                    - rds:DownloadDBLogFilePortion
+                    - rds:ModifyDBInstance
+                    - rds:StartDBCluster
+                    - rds:StartDBInstance
+                    - rds:StopDBCluster
+                    - rds:StopDBInstance
+                    - rds:DeleteDBClusterSnapshot
+                    - rds:DeleteDBInstance
+                    - rds:DeleteDBSnapshot
+                    Effect: Allow
+                    Resource: arn:aws:rds:us-east-1:*:*
+                
+    DevopsBotInstanceProfile:
+        Type: AWS::IAM::InstanceProfile
+        Properties:
+          Path: "/"
+          Roles:
+          - Ref: DevopsBotRole

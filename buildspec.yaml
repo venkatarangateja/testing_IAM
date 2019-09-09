@@ -1,0 +1,29 @@
+version: 0.2
+env:
+  variables:
+    s3_destination_bucket: cicd-testing-backet
+    lambda_function_name: stack-status-cicd
+phases:
+  install:
+    runtime-versions:
+      python: 3.7 
+    commands:
+      - apt-get update -y
+      - apt-get install zip -y
+      - apt-get install unzip -y
+  build:
+    commands:
+      - echo Entered the pre_build phase...
+      - pwd
+      - ls -la
+      - zip lambda_function.zip lambda_function.py
+      - python script.py > output.txt
+      - ls -la
+      - aws s3 cp output.txt s3://$s3_destination_bucket/bala/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+  post_build:
+    commands:
+      - echo Entered the post_build phase...
+      - echo Build completed on `date`
+      - aws s3 ls s3://cicd-testing-backet
+      - aws s3 cp bala/ s3://$s3_destination_bucket/bala/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers --recursive
+      - aws lambda update-function-code --function-name stack-status-cicd --zip-file fileb://lambda_function.zip 
