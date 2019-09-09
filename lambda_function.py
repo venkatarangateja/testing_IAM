@@ -47,4 +47,4 @@ def lambda_handler(event,context):
                     print cft_response
                     pipe_resp=pipeline.put_job_success_result(jobId=event['CodePipeline.job']['id'])
                 except Exception, e:
-                    print('The error is:',e)
+                    print('The error encountered is:',e)
