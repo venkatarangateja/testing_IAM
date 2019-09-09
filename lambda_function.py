@@ -48,8 +48,8 @@ def lambda_handler(event,context):
                     put_job_success(event)
                 except Exception, e:
                     print('the stack {} in account {} already exists:'.format(stack_name,acc_ids),e)
-                    put_job_failure(event)
-                    
+                 
+                        
             else:
                 try:
                     cft_response = session_token.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
@@ -57,5 +57,5 @@ def lambda_handler(event,context):
                     put_job_success(event)
                 except Exception, e:
                     print('the template in account {} is not updated:'.format(acc_ids),e)
-                    put_job_failure(event)
+                    
                      

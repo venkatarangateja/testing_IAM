@@ -165,7 +165,28 @@ Resources:
                     - eks:*    
                     Effect: Allow
                     Resource: arn:aws:eks:us-east-1:*:*
-
+                -    
+                    Action:
+                    - rds:AddRoleToDBCluster
+                    - rds:AddRoleToDBInstance
+                    - rds:CreateDBClusterSnapshot
+                    - rds:CreateDBInstance
+                    - rds:CreateDBInstanceReadReplica
+                    - rds:CreateDBSecurityGroup
+                    - rds:CreateDBSnapshot
+                    - rds:CreateDBSubnetGroup
+                    - rds:CreateEventSubscription
+                    - rds:DownloadDBLogFilePortion
+                    - rds:ModifyDBInstance
+                    - rds:StartDBCluster
+                    - rds:StartDBInstance
+                    - rds:StopDBCluster
+                    - rds:StopDBInstance
+                    - rds:DeleteDBClusterSnapshot
+                    - rds:DeleteDBInstance
+                    - rds:DeleteDBSnapshot
+                    Effect: Allow
+                    Resource: arn:aws:rds:us-east-1:*:*
                 
     DevopsBotInstanceProfile:
         Type: AWS::IAM::InstanceProfile
