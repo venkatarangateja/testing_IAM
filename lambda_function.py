@@ -19,6 +19,13 @@ def init_session(accounts,acc_ids):
 	#stack_resp  = sess_client.describe_stacks()['Stacks']
 	return sess_client
 
+def put_job_success():
+    pipeline    =   boto3.client('codepipeline')
+    pipe_resp   =   pipeline.put_job_success_result(jobId=event['CodePipeline.job']['id'])
+    
+def put_job_failure():
+    pipeline    =   boto3.client('codepipeline')
+    pipe_resp   =   pipeline.put_job_fialure_result(jobId=event['CodePipeline.job']['id'])
 
 def lambda_handler(event,context):
     temp_folder = '/tmp/outputs.txt'
@@ -28,7 +35,7 @@ def lambda_handler(event,context):
     stack_name  = 'testing-version-1'
     s3_client 	= boto3.client('s3')
     s3_client.download_file(Bucket,Key,temp_folder)
-    pipeline    =  boto3.client('codepipeline')
+    
     with open(temp_folder) as file_name:
         data  		= json.load(file_name)
         for acc_ids in data.keys():
@@ -38,13 +45,17 @@ def lambda_handler(event,context):
                 try:
                     cft_response = session_token.create_stack(StackName=stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
                     print cft_response
-                    pipe_resp=pipeline.put_job_success_result(jobId=event['CodePipeline.job']['id'])
+                    put_job_success()
                 except Exception, e:
                     print('the stack {} in account {} already exists:'.format(stack_name,acc_ids),e)
+                    put_job_failure
+                    
             else:
                 try:
                     cft_response = session_token.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
                     print cft_response
-                    pipe_resp=pipeline.put_job_success_result(jobId=event['CodePipeline.job']['id'])
+                    put_job_success()
                 except Exception, e:
-                     print('the template in account {} is not updated:'.format(acc_ids),e)
+                    print('the template in account {} is not updated:'.format(acc_ids),e)
+                    put_job_failure()
+                     
