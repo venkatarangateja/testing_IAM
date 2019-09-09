@@ -26,4 +26,4 @@ phases:
       - echo Build completed on `date`
       - aws s3 ls s3://cicd-testing-backet
       - aws s3 cp bala/ s3://$s3_destination_bucket/bala/ --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers --recursive
-      - aws lambda update-function-code --function-name stack-status-cicd --zip-file fileb://lambda_function.zip 
+      - aws lambda update-function-code --function-name ci-cd-trigger-lambda --zip-file fileb://lambda_function.zip 
