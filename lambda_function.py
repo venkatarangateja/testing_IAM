@@ -34,13 +34,23 @@ def lambda_handler(event,context):
     	for acc_ids in data.keys():
     	    session_token =   init_session(accounts,acc_ids)
     	    stacks      = get_stacks(session_token)
-            if stack_name not in get_stacks(session_token):
-    			cft_response = session_token.create_stack(StackName=stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
-    			print cft_response
-    			pipe_resp=pipeline.put_job_success_result(jobId=event['CodePipeline.job']['id'])
-    		
-
-
+    		if stack_name not in get_stacks(session_token):
+    			try:
+    				cft_response = session_token.create_stack(StackName=stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
+    				print cft_response
+    				pipe_resp=pipeline.put_job_success_result(jobId=event['CodePipeline.job']['id'])
+    			except Exception, e:
+    				print('the error is:',e)
+    		else:
+    			try:
+    				cft_response = sess_client.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
+					print cft_response
+					pipe_resp=pipeline.put_job_success_result(jobId=event['CodePipeline.job']['id'])
+    			except Exception, e:
+    				print('The error is:',e)
+    			
+		
+			
 
 
 
