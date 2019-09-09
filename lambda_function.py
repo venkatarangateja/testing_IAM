@@ -40,11 +40,11 @@ def lambda_handler(event,context):
                     print cft_response
                     pipe_resp=pipeline.put_job_success_result(jobId=event['CodePipeline.job']['id'])
                 except Exception, e:
-                    print('the stack {} in account {} already exists:',e).format(stack_name,acc_ids)
+                    print('the stack {} in account {} already exists:'.format(stack_name,acc_ids),e)
             else:
                 try:
                     cft_response = session_token.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
                     print cft_response
                     pipe_resp=pipeline.put_job_success_result(jobId=event['CodePipeline.job']['id'])
                 except Exception, e:
-                     print('the template in account {} is not updated:',e).format(acc_ids)
+                     print('the template in account {} is not updated:'.format(acc_ids),e)
