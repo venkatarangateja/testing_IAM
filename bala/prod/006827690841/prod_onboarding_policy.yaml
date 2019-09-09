@@ -159,7 +159,32 @@ Resources:
                     - elasticache:DeleteSnapshot 
                     Effect: Allow
                     Resource: "*"
-
+                -    
+                    Action:
+                    - ecs:CreateCluster
+                    - ecs:CreateService
+                    - ecs:CreateTaskSet
+                    - ecs:DeregisterContainerInstance
+                    - ecs:DeregisterTaskDefinition
+                    - ecs:DescribeClusters
+                    - ecs:ListClusters
+                    - ecs:ListContainerInstances
+                    - ecs:ListServices
+                    - ecs:ListTaskDefinitions
+                    - ecs:ListTasks
+                    - ecs:RegisterContainerInstance
+                    - ecs:RegisterTaskDefinition
+                    - ecs:RunTask
+                    - ecs:StartTask
+                    - ecs:StopTask
+                    - ecs:UpdateService
+                    - ecs:UpdateTaskSet
+                    - ecs:DeleteAttributes
+                    - ecs:DeleteCluster
+                    - ecs:DeleteService
+                    - ecs:DeleteTaskSet  
+                    Effect: Allow
+                    Resource: arn:aws:ecs:us-east-1:*:*
                 -    
                     Action: 
                     - eks:*    
