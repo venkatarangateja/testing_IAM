@@ -78,8 +78,8 @@ def lambda_handler(event,context):
             data    = json.load(file_name)
             for acc_ids in data.keys():
                 session_token =   init_session(accounts,acc_ids)
-                stacks      = get_all_stacks(session_token)
                 try:
+                    stacks      = get_all_stacks(session_token)
                     if stack_name not in stacks:
                         try:
                             cft_response = session_token.create_stack(StackName=stack_name,TemplateURL = 'https://'+Bucket_name+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
@@ -100,9 +100,11 @@ def lambda_handler(event,context):
                             
                         except Exception, error_2:
                             print('the template in account {} is not updated:'.format(acc_ids),'stack not updated')
+                            
                 except Exception,error_3:
                     print('session_token not established',error_3)
                     put_job_failure(job_id,'session not established')
+                    
     except Exception, error_4:
         print ('the error is ',error_4)
         put_job_failure(job_id,'lambda_execution_error')
