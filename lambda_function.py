@@ -78,7 +78,7 @@ def lambda_handler(event,context):
                             print cft_response
                             put_job_success(job_id,'stack create complete')
                         except Exception as error:
-                            print ('the stack {} in account {} already exists:'.format(stack_name,acc_ids),error)
+                            print('the stack {} in account {} already exists:'.format(stack_name,acc_ids),error)
 
                     else:
                         try:
@@ -86,7 +86,7 @@ def lambda_handler(event,context):
                             print cft_response
                             put_job_success(job_id,'stack_upadte_complete')
                         except Exception as error_1:
-                            print ('the template in account {} is not updated:'.format(acc_ids),error_1)
+                            print('the template in account {} is not updated:'.format(acc_ids),error_1)
     except Exception as error_2:
         print('Function failed due to exception.') 
         print(error_2)
