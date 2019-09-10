@@ -87,7 +87,7 @@ def lambda_handler(event,context):
                             put_job_success(job_id,'stack create complete')
                             
                         except Exception, error_1:
-                            print('the stack {} in account {} already exists:'.format(stack_name,acc_ids),error_1)
+                            print('the error in account {} is:'.format(acc_ids),error_1)
                             put_job_failure(job_id,error_1)
                             
                             
@@ -105,4 +105,4 @@ def lambda_handler(event,context):
                     put_job_failure(job_id,error_3)
     except Exception, error_4:
         print ('the error is ',error_4)
-        put_job_failure(job_id,'lambda_execution_failed',error_4)
+        put_job_failure(job_id,error_4)
