@@ -185,7 +185,11 @@ Resources:
                     - ecs:DeleteTaskSet  
                     Effect: Allow
                     Resource: arn:aws:ecs:us-east-1:*:*
-
+                -    
+                    Action: 
+                    - eks:*    
+                    Effect: Allow
+                    Resource: arn:aws:eks:us-east-1:*:*
                 -    
                     Action:
                     - rds:AddRoleToDBCluster

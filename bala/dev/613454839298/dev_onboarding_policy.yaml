@@ -142,11 +142,7 @@ Resources:
                     Resource: arn:aws:iam::*:*
 
 
-                -    
-                    Action: 
-                    - eks:*    
-                    Effect: Allow
-                    Resource: arn:aws:eks:us-east-1:*:*
+
                 -    
                     Action:
                     - rds:AddRoleToDBCluster

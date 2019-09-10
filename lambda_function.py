@@ -74,9 +74,10 @@ def lambda_handler(event,context):
         #print Bucket_name
         #print Key
         print event
+        errors=[]
         with open(temp_folder) as file_name:
             data    = json.load(file_name)
-            errors=[]
+            
             for acc_ids in data.keys():
                 
                 try:
@@ -106,9 +107,9 @@ def lambda_handler(event,context):
                 except Exception,error_3:
                     print('session_token not established to account {}'.format(acc_ids),error_3)
                     errors.append(error_3)
-            print errors
-            if errors!=[]:
-                put_job_failure(job_id,'job_failed')
+        print errors
+        if errors!=[]:
+            put_job_failure(job_id,'job_failed')
     except Exception, error_4:
         print ('the error is ',error_4)
            
