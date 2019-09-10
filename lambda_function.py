@@ -87,4 +87,3 @@ def lambda_handler(event,context):
                             put_job_success(job_id,'stack_upadte_complete')
                         except Exception as error_1:
                             print('the template in account {} is not updated:'.format(acc_ids),error_1)
-
