@@ -108,8 +108,7 @@ def lambda_handler(event,context):
                     errors.append(error_3)
             print errors
             if errors!=[]:
-                finally:
-                    put_job_failure(job_id,'job_failed')
+                put_job_failure(job_id,'job_failed')
     except Exception, error_4:
         print ('the error is ',error_4)
            
