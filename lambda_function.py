@@ -2,7 +2,7 @@ import json
 import boto3
 from boto3.session import Session
 import os
-
+code_pipeline = boto3.client('codepipeline')
 def get_all_stacks(sess_client):
     existing_stack_names=[]
     stack_resp  = sess_client.describe_stacks()['Stacks']
