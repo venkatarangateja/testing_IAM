@@ -42,9 +42,9 @@ def init_session(accounts,acc_ids):
 
 
 def put_job_success(job_id,message):
-	print('Putting job success')
+    print('Putting job success')
     print(message)
-	code_pipeline.put_job_success_result(jobId=job_id,continuationToken=job_id)
+    code_pipeline.put_job_success_result(jobId=job_id,continuationToken=job_id)
 
 
 def put_job_failure(job_id,message):
@@ -67,7 +67,7 @@ def lambda_handler(event,context):
         temp_folder = '/tmp/outputs.txt'
         s3_client(Bucket_name,Key,temp_folder)
         with open(temp_folder) as file_name:
-            data  		= json.load(file_name)
+            data    = json.load(file_name)
             for acc_ids in data.keys():
                 session_token =   init_session(accounts,acc_ids)
                 stacks      = get_all_stacks(session_token)
@@ -87,8 +87,6 @@ def lambda_handler(event,context):
                             put_job_success(job_id,'stack_upadte_complete')
                         except Exception as error_1:
                             print ('the template in account {} is not updated:'.format(acc_ids),error_1)
-
-
     except Exception as error_2:
         print('Function failed due to exception.') 
         print(error_2)
