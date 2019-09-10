@@ -106,4 +106,4 @@ def lambda_handler(event,context):
                     
     except Exception, error_4:
         print ('the error is ',error_4)
-        put_job_failure(job_id,'lambda_execution_error')
+        #put_job_failure(job_id,'lambda_execution_error')
