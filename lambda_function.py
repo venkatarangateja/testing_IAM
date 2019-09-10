@@ -100,8 +100,9 @@ def lambda_handler(event,context):
                             
                         except Exception, error_2:
                             print('the template in account {} is not updated:'.format(acc_ids),error_2)
-                except Exception,e:
-                    print('session_token not established')
-    except Exception, e:
-        print ('the error is ',e)
-        put_job_failure(job_id,'execution_failed')
+                except Exception,error_3:
+                    print('session_token not established',error_3)
+                    put_job_failure(job_id,error_3)
+    except Exception, error_4:
+        print ('the error is ',error_4)
+        put_job_failure(job_id,'lambda_execution_failed',error_4)
