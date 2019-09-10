@@ -82,7 +82,7 @@ def lambda_handler(event,context):
                 try:
                     if stack_name not in stacks:
                         try:
-                            cft_response = session_token.create_stack(StackName=stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
+                            cft_response = session_token.create_stack(StackName=stack_name,TemplateURL = 'https://'+Bucket_name+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
                             print cft_response
                             put_job_success(job_id,'stack create complete')
                             
@@ -93,7 +93,7 @@ def lambda_handler(event,context):
                             
                     else:
                         try:
-                            cft_response = session_token.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
+                            cft_response = session_token.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket_name+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
                             print cft_response
                             put_job_success(job_id,'stack_upadte_complete')
                             
