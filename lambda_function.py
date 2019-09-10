@@ -54,7 +54,7 @@ def put_job_failure(job_id,message):
 
 def s3_client(Bucket_name,Key,temp_folder):
     s3_client 	= boto3.client('s3')
-    s3_client.download_file(Bucket,Key,temp_folder)
+    s3_client.download_file(Bucket_name,Key,temp_folder)
 
 def lambda_handler(event,context):
     try:
@@ -72,3 +72,4 @@ def lambda_handler(event,context):
         print Key
     except Exception as e:
         print ('the error is ',e)
+        put_job_failure(job_id,'execution_failed')
