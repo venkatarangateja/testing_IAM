@@ -44,7 +44,7 @@ def init_session(accounts,acc_ids):
 def put_job_success(job_id,message):
     print('Putting job success')
     print(message)
-    code_pipeline.put_job_success_result(jobId=job_id,continuationToken=job_id)
+    code_pipeline.put_job_success_result(jobId=job_id)
 
 
 def put_job_failure(job_id,message):
