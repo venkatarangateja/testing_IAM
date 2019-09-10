@@ -66,24 +66,9 @@ def lambda_handler(event,context):
         Key = params['Key']
         temp_folder = '/tmp/outputs.txt'
         s3_client(Bucket_name,Key,temp_folder)
-        with open(temp_folder) as file_name:
-            data    = json.load(file_name)
-            for acc_ids in data.keys():
-                session_token =   init_session(accounts,acc_ids)
-                stacks      = get_all_stacks(session_token)
-                try:
-                    if stack_name not in stacks:
-                        try:
-                            cft_response = session_token.create_stack(StackName=stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
-                            print cft_response
-                            put_job_success(job_id,'stack create complete')
-                        except Exception as error:
-                            print('the stack {} in account {} already exists:'.format(stack_name,acc_ids),error)
-
-                    else:
-                        try:
-                            cft_response = session_token.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
-                            print cft_response
-                            put_job_success(job_id,'stack_upadte_complete')
-                        except Exception as error_1:
-                            print('the template in account {} is not updated:'.format(acc_ids),error_1)
+        print params
+        print stack_name
+        print Bucket_name
+        print Key
+    except Exception as e:
+        print ('the error is ',e)
