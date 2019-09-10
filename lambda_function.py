@@ -87,7 +87,7 @@ def lambda_handler(event,context):
                         try:
                             cft_response = session_token.create_stack(StackName=stack_name,TemplateURL = 'https://'+Bucket_name+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
                             print cft_response
-                            put_job_success(job_id,'stack create complete')
+                            #put_job_success(job_id,'stack create complete')
                             
                         except Exception, error_1:
                             print('the error in account {} is:'.format(acc_ids),error_1)
@@ -98,7 +98,7 @@ def lambda_handler(event,context):
                         try:
                             cft_response = session_token.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket_name+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
                             print cft_response
-                            put_job_success(job_id,'stack_upadte_complete')
+                            #put_job_success(job_id,'stack_upadte_complete')
                             
                         except Exception, error_2:
                             print('the template in account {} is not updated:'.format(acc_ids),'stack not updated')
@@ -110,6 +110,8 @@ def lambda_handler(event,context):
         print errors
         if errors!=[]:
             put_job_failure(job_id,'job_failed')
+        else:
+            put_job_success(job_id,'job_success')
     except Exception, error_4:
         print ('the error is ',error_4)
            
