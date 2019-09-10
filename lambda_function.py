@@ -88,7 +88,7 @@ def lambda_handler(event,context):
                             
                         except Exception, error_1:
                             print('the error in account {} is:'.format(acc_ids),error_1)
-                            
+                       
                             
                             
                     else:
@@ -105,4 +105,7 @@ def lambda_handler(event,context):
                     
     except Exception, error_4:
         print ('the error is ',error_4)
+        
+    finally:
         put_job_failure(job_id,'job_execution_failed')
+        
