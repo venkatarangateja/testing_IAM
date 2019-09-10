@@ -88,7 +88,6 @@ def lambda_handler(event,context):
                             
                         except Exception, error_1:
                             print('the error in account {} is:'.format(acc_ids),error_1)
-                            put_job_failure(job_id,'stack not created')
                             
                             
                             
