@@ -67,7 +67,7 @@ def lambda_handler(event,context):
         Bucket_name = params['Bucket_name']
         Key = params['Key']
         temp_folder = '/tmp/outputs.txt'
-        accounts    = {'613454839298':'arn:aws:iam::613454839298:role/AWSCloudFormationStackSetExecutionRole','006827690841':'arn:aws:iam::006827690841:role/bala_new'}
+        accounts    = {'613454839298':'arn:aws:iam::61345483929:role/AWSCloudFormationStackSetExecutionRole','006827690841':'arn:aws:iam::006827690841:role/bala_new'}
         s3_client(Bucket_name,Key,temp_folder)
         #print params
         #print stack_name
