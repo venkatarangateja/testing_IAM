@@ -52,7 +52,7 @@ def put_job_failure(job_id,message):
     print(message)
     code_pipeline.put_job_failure_result(jobId=job_id, failureDetails={'message': message, 'type': 'JobFailed'})
 
-def s3_client(Bucket_name,Key,):
+def s3_client(Bucket_name,Key,temp_folder):
     s3_client 	= boto3.client('s3')
     s3_client.download_file(Bucket,Key,temp_folder)
 
