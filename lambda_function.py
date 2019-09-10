@@ -3,13 +3,33 @@ import json
 from boto3.session import Session
 import os
 
-
-def get_stacks(sess_client):
+def get_all_stacks(sess_client):
 	existing_stack_names=[]
 	stack_resp  = sess_client.describe_stacks()['Stacks']
 	for stk_name in stack_resp:
 		existing_stack_names.append(stk_name['StackName'])
 	return existing_stack_names
+
+
+def get_user_params(job_data):
+	
+	try:
+        user_parameters = job_data['actionConfiguration']['configuration']['UserParameters']
+        decoded_parameters = json.loads(user_parameters)
+	except Exception as e:
+  		raise Exception('UserParameters could not be decoded as JSON')
+    
+    if 'stack_name' not in decoded_parameters:
+        raise Exception('Your UserParameters JSON must include the stack_name')
+    
+    if 'Bucket_name' not in decoded_parameters:
+        raise Exception('Your UserParameters JSON must include the Bucket name')
+    
+    if 'Key' not in decoded_parameters:
+        raise Exception('Your UserParameters JSON must include the Key name')
+    
+    return decoded_parameters
+
 
 def init_session(accounts,acc_ids):
 	sts_client  = boto3.client('sts',region_name = 'us-east-1')
@@ -19,44 +39,66 @@ def init_session(accounts,acc_ids):
 	#stack_resp  = sess_client.describe_stacks()['Stacks']
 	return sess_client
 
-def put_job_success(event):
-    pipeline    =   boto3.client('codepipeline')
-    pipe_resp   =   pipeline.put_job_success_result(jobId=event['CodePipeline.job']['id'])
-    
-def put_job_failure(event):
-    pipeline    =   boto3.client('codepipeline')
-    pipe_resp   =   pipeline.put_job_failure_result(jobId=event['CodePipeline.job']['id'],failureDetails={'type': 'JobFailed','message': 'jobfailed'})
+
+
+def put_job_success(job_id,message):
+	print('Putting job success')
+    print(message)
+	code_pipeline.put_job_success_result(jobId=job_id,continuationToken=job_id)
+
+
+def put_job_failure(job_id,message):
+	print('Putting job failure')
+    print(message)
+    code_pipeline.put_job_failure_result(jobId=job_id, failureDetails={'message': message, 'type': 'JobFailed'})
+
+def s3_client(Bucket_name,Key,):
+	s3_client 	= boto3.client('s3')
+    s3_client.download_file(Bucket,Key,temp_folder)
 
 def lambda_handler(event,context):
-    temp_folder = '/tmp/outputs.txt'
-    accounts    = {'613454839298':'arn:aws:iam::613454839298:role/AWSCloudFormationStackSetExecutionRole','006827690841':'arn:aws:iam::006827690841:role/bala_new'}
-    Bucket      = 'cicd-testing-backet'
-    Key         = 'bala/output.txt'
-    stack_name  = 'testing-version-1'
-    s3_client 	= boto3.client('s3')
-    s3_client.download_file(Bucket,Key,temp_folder)
-    
-    with open(temp_folder) as file_name:
-        data  		= json.load(file_name)
-        for acc_ids in data.keys():
-            session_token =   init_session(accounts,acc_ids)
-            stacks      = get_stacks(session_token)
-            if stack_name not in get_stacks(session_token):
-                try:
-                    cft_response = session_token.create_stack(StackName=stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
-                    print cft_response
-                    put_job_success(event)
-                except Exception, e:
-                    print('the stack {} in account {} already exists:'.format(stack_name,acc_ids),e)
-                    put_job_failure(event)
-                 
-                        
-            else:
-                try:
-                    cft_response = session_token.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
-                    print cft_response
-                    put_job_success(event)
-                except Exception, e:
-                    print('the template in account {} is not updated:'.format(acc_ids),e)
-                    put_job_failure(event)
-                     
+	try:
+		job_id = event['CodePipeline.job']['id']
+		job_data = event['CodePipeline.job']['data']
+		params = get_user_params(job_data)
+		stack_name = params['stack_name']
+		Bucket_name = params['Bucket_name']
+		Key = params['Key']
+		temp_folder = '/tmp/outputs.txt'
+		s3_client(Bucket_name,Key,temp_folder)
+		with open(temp_folder) as file_name:
+			data  		= json.load(file_name)
+    		for acc_ids in data.keys():
+    			session_token =   init_session(accounts,acc_ids)
+    			stacks      = get_all_stacks(session_token)
+    			try:
+    				if stack_name not in stacks:
+    					try:
+    						cft_response = session_token.create_stack(StackName=stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
+    						print cft_response
+    						put_job_success(job_id,'stack create complete')
+    					except Exception as error:
+    						print ('the stack {} in account {} already exists:'.format(stack_name,acc_ids),error)
+
+    				else:
+    					try:
+    						cft_response = session_token.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
+    						print cft_response
+    						put_job_success(job_id,'stack_upadte_complete')
+    					except Exception as error_1:
+    						print ('the template in account {} is not updated:'.format(acc_ids),error_1)
+
+
+    except Exception as error_2:
+    	print('Function failed due to exception.') 
+        print(error_2)
+        put_job_failure(job_id, 'Function exception: ' + str(error_2))
+
+
+
+
+
+
+
+
+			
