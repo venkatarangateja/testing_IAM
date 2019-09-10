@@ -77,6 +77,7 @@ def lambda_handler(event,context):
         with open(temp_folder) as file_name:
             data    = json.load(file_name)
             for acc_ids in data.keys():
+            errors=[]
                 try:
                     session_token =   init_session(accounts,acc_ids)               
                     stacks      = get_all_stacks(session_token)
@@ -88,10 +89,10 @@ def lambda_handler(event,context):
                             
                         except Exception, error_1:
                             print('the error in account {} is:'.format(acc_ids),error_1)
-                        
+                            error.append(error_1)
                             
                             
-                    elif 
+                    else: 
                         try:
                             cft_response = session_token.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket_name+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
                             print cft_response
@@ -99,13 +100,15 @@ def lambda_handler(event,context):
                             
                         except Exception, error_2:
                             print('the template in account {} is not updated:'.format(acc_ids),'stack not updated')
-                    else:
-                        finally:
-                            put_job_failure(job_id,'job_execution_failed')
+                            error.append(error_2)
                         
                 except Exception,error_3:
                     print('session_token not established to account {}'.format(acc_ids),error_3)
-                    
+                    error.append(error_3)
+            print error
+            if error!=[]:
+                finally:
+                    put_job_failure(job_id,'job_failed')
     except Exception, error_4:
         print ('the error is ',error_4)
            
