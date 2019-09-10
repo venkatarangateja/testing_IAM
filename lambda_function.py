@@ -88,7 +88,7 @@ def lambda_handler(event,context):
                             
                         except Exception, error_1:
                             print('the error in account {} is:'.format(acc_ids),error_1)
-                            put_job_failure(job_id,error_1)
+                            put_job_failure(job_id,'stack not created')
                             
                             
                             
@@ -99,10 +99,10 @@ def lambda_handler(event,context):
                             put_job_success(job_id,'stack_upadte_complete')
                             
                         except Exception, error_2:
-                            print('the template in account {} is not updated:'.format(acc_ids),error_2)
+                            print('the template in account {} is not updated:'.format(acc_ids),'stack not updated')
                 except Exception,error_3:
                     print('session_token not established',error_3)
-                    put_job_failure(job_id,error_3)
+                    put_job_failure(job_id,'session not established')
     except Exception, error_4:
         print ('the error is ',error_4)
-        put_job_failure(job_id,error_4)
+        put_job_failure(job_id,'lambda_execution_error')
