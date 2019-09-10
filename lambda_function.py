@@ -48,7 +48,7 @@ def put_job_success(job_id,message):
 
 
 def put_job_failure(job_id,message):
-	print('Putting job failure')
+    print('Putting job failure')
     print(message)
     code_pipeline.put_job_failure_result(jobId=job_id, failureDetails={'message': message, 'type': 'JobFailed'})
 
@@ -93,12 +93,3 @@ def lambda_handler(event,context):
         print('Function failed due to exception.') 
         print(error_2)
         put_job_failure(job_id, 'Function exception: ' + str(error_2))
-
-
-
-
-
-
-
-
-			
