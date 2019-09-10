@@ -88,8 +88,3 @@ def lambda_handler(event,context):
                         except Exception as error_1:
                             print('the template in account {} is not updated:'.format(acc_ids),error_1)
 
-    except Exception as e:
-        print('Function failed due to exception.') 
-        print(error_2)
-        put_job_failure(job_id, 'Function exception: ' + str(error_2))
-
