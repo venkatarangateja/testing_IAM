@@ -67,6 +67,7 @@ def lambda_handler(event,context):
         Bucket_name = params['Bucket_name']
         Key = params['Key']
         temp_folder = '/tmp/outputs.txt'
+        accounts    = {'613454839298':'arn:aws:iam::613454839298:role/AWSCloudFormationStackSetExecutionRole','006827690841':'arn:aws:iam::006827690841:role/bala_new'}
         s3_client(Bucket_name,Key,temp_folder)
         #print params
         #print stack_name
@@ -87,7 +88,6 @@ def lambda_handler(event,context):
                             
                         except Exception, error_1:
                             print('the stack {} in account {} already exists:'.format(stack_name,acc_ids),error_1)
-                            put_job_failure(job_id,'stack_already_exists')
                             
                             
                             
@@ -99,7 +99,6 @@ def lambda_handler(event,context):
                             
                         except Exception, error_2:
                             print('the template in account {} is not updated:'.format(acc_ids),error_2)
-                            put_job_failure(job_id,'stack_cannot_be_updated')
                 except Exception,e:
                     print('session_token not established')
     except Exception, e:
