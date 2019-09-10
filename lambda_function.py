@@ -77,8 +77,8 @@ def lambda_handler(event,context):
         with open(temp_folder) as file_name:
             data    = json.load(file_name)
             for acc_ids in data.keys():
-                session_token =   init_session(accounts,acc_ids)
                 try:
+                    session_token =   init_session(accounts,acc_ids)               
                     stacks      = get_all_stacks(session_token)
                     if stack_name not in stacks:
                         try:
