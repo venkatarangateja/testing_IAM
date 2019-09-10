@@ -88,6 +88,7 @@ def lambda_handler(event,context):
                             
                         except Exception, error_1:
                             print('the stack {} in account {} already exists:'.format(stack_name,acc_ids),error_1)
+                            put_job_failure(job_id,error_1)
                             
                             
                             
