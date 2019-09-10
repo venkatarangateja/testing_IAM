@@ -91,7 +91,7 @@ def lambda_handler(event,context):
                         
                             
                             
-                    elif:
+                    elif 
                         try:
                             cft_response = session_token.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket_name+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
                             print cft_response
