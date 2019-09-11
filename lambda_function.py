@@ -113,8 +113,8 @@ def lambda_handler(event,context):
                             else:
                                 stk_rsp = session_token.describe_stacks(StackName=stack_name)
                                 time.sleep(60)
-                                stk_rsp['Stacks'][0]['StackStatus'] ==('ROLLBACK_IN_PROGRESS' or 'ROLLBACK_FAILED' or 'ROLLBACK_COMPLETE'):
-                                errors.append(error_2)
+                                if stk_rsp['Stacks'][0]['StackStatus'] ==('ROLLBACK_IN_PROGRESS' or 'ROLLBACK_FAILED' or 'ROLLBACK_COMPLETE'):
+                                    errors.append(error_2)
                         
                 except Exception,error_3:
                     print('session_token not established to account {}'.format(acc_ids),error_3)
