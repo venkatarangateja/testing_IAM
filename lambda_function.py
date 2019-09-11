@@ -107,7 +107,7 @@ def lambda_handler(event,context):
                             #put_job_success(job_id,'stack_upadte_complete')
                             
                         except Exception, error_2:
-                            if Exception=='ClientError':
+                            if error_2:
                                 print('the error in account {} is :'.format(acc_ids),error_2)
                                 errors.append(error_2)
                             else:
