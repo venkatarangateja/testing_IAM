@@ -34,7 +34,7 @@ Resources:
             PolicyDocument:
               Version: '2012-10-17'
               Statement:
-                -
+                
                     Action:
                     - ec2:AssignPrivateIpAddresses
                     - ec2:AssociateAddress
