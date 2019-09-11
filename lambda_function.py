@@ -2,6 +2,9 @@ import json
 import boto3
 from boto3.session import Session
 import os
+import time
+
+
 code_pipeline = boto3.client('codepipeline')
 cft=boto3.client('cloudformation',region_name='us-east-1')
 def get_all_stacks(sess_client):
@@ -104,9 +107,10 @@ def lambda_handler(event,context):
                             
                         except Exception, error_2:
                             print('the error in account {} is :'.format(acc_ids),error_2)
-                            #stk_rsp = cft.describe_stacks(StackName:stack_name)
-                            #if stk_rsp['Stacks'][0]['StackStatus'] ==('ROLLBACK_IN_PROGRESS' or 'ROLLBACK_FAILED' or 'ROLLBACK_COMPLETE' or ''
-                            errors.append(error_2)
+                            stk_rsp = session_token.describe_stacks(StackName:stack_name)
+                            time.sleep(60)
+                            if stk_rsp['Stacks'][0]['StackStatus'] ==('ROLLBACK_IN_PROGRESS' or 'ROLLBACK_FAILED' or 'ROLLBACK_COMPLETE'):
+                                errors.append(error_2)
                         
                 except Exception,error_3:
                     print('session_token not established to account {}'.format(acc_ids),error_3)
