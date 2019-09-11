@@ -80,7 +80,7 @@ Resources:
                     - ec2:AttachVolume
                     - ec2:RebootInstances
                     - ec2:AttachClassicLinkVpc
-                    - ec2:DisassociateIamInstanceProfile
+                    - iam:DisassociateIamInstanceProfile
                     - ec2:AssociateIamInstanceProfile
                     Resource: arn:aws:ec2:us-east-1:*:*
                     Condition:
