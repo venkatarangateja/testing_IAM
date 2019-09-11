@@ -68,7 +68,7 @@ Resources:
                     - ec2:CreateVolume
                     - ec2:DisassociateAddress
                     Effect: Allow
-                    Resource: arn:aws:ec2:us-east-1:*:*
+                    Resource: arn:aws:ec2:us-west-1:*:*
                     Condition:
                       StringEquals:
                         ec2:Region:
