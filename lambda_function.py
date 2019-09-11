@@ -3,6 +3,7 @@ import boto3
 from boto3.session import Session
 import os
 import time
+from botocore.exceptions import ClientError, ParamValidationError
 
 
 code_pipeline = boto3.client('codepipeline')
@@ -106,10 +107,13 @@ def lambda_handler(event,context):
                             #put_job_success(job_id,'stack_upadte_complete')
                             
                         except Exception, error_2:
-                            print('the error in account {} is :'.format(acc_ids),error_2)
-                            stk_rsp = session_token.describe_stacks(StackName=stack_name)
-                            time.sleep(60)
-                            if stk_rsp['Stacks'][0]['StackStatus'] ==('ROLLBACK_IN_PROGRESS' or 'ROLLBACK_FAILED' or 'ROLLBACK_COMPLETE'):
+                            if Exception=='ClientError':
+                                print('the error in account {} is :'.format(acc_ids),error_2)
+                                errors.append(error_2)
+                            else:
+                                stk_rsp = session_token.describe_stacks(StackName=stack_name)
+                                time.sleep(60)
+                                stk_rsp['Stacks'][0]['StackStatus'] ==('ROLLBACK_IN_PROGRESS' or 'ROLLBACK_FAILED' or 'ROLLBACK_COMPLETE'):
                                 errors.append(error_2)
                         
                 except Exception,error_3:
