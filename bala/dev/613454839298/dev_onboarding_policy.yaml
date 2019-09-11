@@ -175,4 +175,4 @@ Resources:
         Properties:
           Path: "/"
           Roles:
-          - Ref: Devops
+          - Ref: DevopsBotRole
