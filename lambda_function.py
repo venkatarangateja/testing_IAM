@@ -3,6 +3,7 @@ import boto3
 from boto3.session import Session
 import os
 code_pipeline = boto3.client('codepipeline')
+cft=boto3.client('cloudformation',region_name='us-east-1')
 def get_all_stacks(sess_client):
     existing_stack_names=[]
     stack_resp  = sess_client.describe_stacks()['Stacks']
@@ -67,6 +68,7 @@ def lambda_handler(event,context):
         Bucket_name = params['Bucket_name']
         Key = params['Key']
         temp_folder = '/tmp/outputs.txt'
+        
         accounts    = {'613454839298':'arn:aws:iam::613454839298:role/AWSCloudFormationStackSetExecutionRole','006827690841':'arn:aws:iam::006827690841:role/bala_new'}
         s3_client(Bucket_name,Key,temp_folder)
         #print params
@@ -91,7 +93,7 @@ def lambda_handler(event,context):
                             
                         except Exception, error_1:
                             print('the error in account {} is:'.format(acc_ids),error_1)
-                            errors.append(error_1)
+                            
                             
                             
                     else: 
@@ -102,6 +104,8 @@ def lambda_handler(event,context):
                             
                         except Exception, error_2:
                             print('the error in account {} is :'.format(acc_ids),error_2)
+                            #stk_rsp = cft.describe_stacks(StackName:stack_name)
+                            #if stk_rsp['Stacks'][0]['StackStatus'] ==('ROLLBACK_IN_PROGRESS' or 'ROLLBACK_FAILED' or 'ROLLBACK_COMPLETE' or ''
                             errors.append(error_2)
                         
                 except Exception,error_3:
