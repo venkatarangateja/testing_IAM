@@ -134,12 +134,7 @@ Resources:
                     Effect: Allow
                     Resource: arn:aws:s3:::*
 
-                -    
-                    Action:
-                    - sts:AssumeRole
-                    - sts:AssumeRoleWithSAML 
-                    Effect: Allow
-                    Resource: arn:aws:iam::*:*
+
                 -    
                     Action:
                     - elasticache:AddTagsToResource
