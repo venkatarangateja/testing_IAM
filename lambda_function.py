@@ -67,6 +67,15 @@ def sns_publish(message):
     TopicArn='arn:aws:sns:us-east-1:374553884378:code_pipeline_trigger',
     Message=str(message))
 
+def get_stack_status(session_token,stack_name,acc_ids):
+    stk_rsp = session_token.describe_stacks(StackName=stack_name)
+    time.sleep(60)
+    if stk_rsp['Stacks'][0]['StackStatus'] == ('ROLLBACK_IN_PROGRESS' or 'ROLLBACK_FAILED' or 'ROLLBACK_COMPLETE' or 'UPDATE_ROLLBACK_FAILED' or 'UPDATE_ROLLBACK_COMPLETE'):
+        error_mssg = 'the stack "{}" in account "{}" is not updated,present status is:"{}"'.format(stack_name,acc_ids,stk_rsp['Stacks'][0]['StackStatus'])
+        return error_mssg
+    else:
+        error_mssg = 'the stack is successfully updated'
+        return error_mssg
 
 
 def lambda_handler(event,context):
@@ -108,6 +117,7 @@ def lambda_handler(event,context):
                             cft_response = session_token.update_stack(StackName = stack_name,TemplateURL = 'https://'+Bucket_name+'.s3.amazonaws.com'+str(data[acc_ids]),Parameters=[{'ParameterKey': 'AccountAlias','ParameterValue': 'tejatestingforlambda'},],Capabilities=['CAPABILITY_NAMED_IAM'])
                             print cft_response
                             #put_job_success(job_id,'stack_upadte_complete')
+                            errors.append(get_stack_status(session_token,stack_name,acc_ids))
                             
                         except Exception, error_2:
                             if error_2:
@@ -117,7 +127,7 @@ def lambda_handler(event,context):
                             else:
                                 stk_rsp = session_token.describe_stacks(StackName=stack_name)
                                 time.sleep(60)
-                                if stk_rsp['Stacks'][0]['StackStatus'] ==('ROLLBACK_IN_PROGRESS' or 'ROLLBACK_FAILED' or 'ROLLBACK_COMPLETE'):
+                                if stk_rsp['Stacks'][0]['StackStatus'] ==('ROLLBACK_IN_PROGRESS' or 'ROLLBACK_FAILED' or 'ROLLBACK_COMPLETE' or 'UPDATE_ROLLBACK_FAILED' or 'UPDATE_ROLLBACK_COMPLETE'):
                                     error_mssg = 'the error in account "{}" is "{}":'.format(acc_ids,error_2)
                                     errors.append(error_mssg)
                         
