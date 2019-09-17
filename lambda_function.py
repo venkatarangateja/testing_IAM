@@ -111,13 +111,15 @@ def lambda_handler(event,context):
                             
                         except Exception, error_2:
                             if error_2:
-                                print('the error in account {} is :'.format(acc_ids),error_2)
-                                errors.append(error_2)
+                                #print('the error in account {} is :'.format(acc_ids),error_2)
+                                error_mssg = str('the error in account {} is :'.format(acc_ids),error_2)
+                                errors.append(error_mssg)
                             else:
                                 stk_rsp = session_token.describe_stacks(StackName=stack_name)
                                 time.sleep(60)
                                 if stk_rsp['Stacks'][0]['StackStatus'] ==('ROLLBACK_IN_PROGRESS' or 'ROLLBACK_FAILED' or 'ROLLBACK_COMPLETE'):
-                                    errors.append(error_2)
+                                    error_mssg = str('the error in account {} is :'.format(acc_ids),error_2)
+                                    errors.append(error_mssg)
                         
                 except Exception,error_3:
                     print('session_token not established to account {}'.format(acc_ids),error_3)
