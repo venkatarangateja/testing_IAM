@@ -170,7 +170,6 @@ Resources:
                     - ecs:RegisterContainerInstance
                     - ecs:RegisterTaskDefinition
                     - ecs:RunTask
-                    - ecs:StartTask
                     - ecs:StopTask
                     - ecs:UpdateService
                     - ecs:UpdateTaskSet
