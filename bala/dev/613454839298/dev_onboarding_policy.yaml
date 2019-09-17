@@ -34,7 +34,7 @@ Resources:
             PolicyDocument:
               Version: '2012-10-17'
               Statement:
-                
+                -
                     Action:
                     - ec2:AssignPrivateIpAddresses
                     - ec2:AssociateAddress
@@ -46,7 +46,7 @@ Resources:
                     - ec2:AttachClassicLinkVpc
                     - ec2:AttachInternetGateway
                     - ec2:AttachNetworkInterface
-                    - ec2:Attach
+                    - ec2:AttachVolume
                     - ec2:AttachVpnGateway
                     - ec2:AuthorizeClientVpnIngress
                     - ec2:AuthorizeSecurityGroupIngress
@@ -58,7 +58,7 @@ Resources:
                     - ec2:CreateNatGateway
                     - ec2:CreateNetworkInterface
                     - ec2:CreateNetworkInterfacePermission
-                    - ec2:CreatePlacement
+                    - ec2:CreatePlacementGroup
                     - ec2:CreateRouteTable
                     - ec2:CreateSecurityGroup
                     - ec2:CreateSnapshots
@@ -68,7 +68,7 @@ Resources:
                     - ec2:CreateVolume
                     - ec2:DisassociateAddress
                     Effect: Allow
-                    Resource: arn:aws:ec2:us-west-1:*:*
+                    Resource: arn:aws:ec2:us-east-1:*:*
                     Condition:
                       StringEquals:
                         ec2:Region:
@@ -80,7 +80,7 @@ Resources:
                     - ec2:AttachVolume
                     - ec2:RebootInstances
                     - ec2:AttachClassicLinkVpc
-                    - iam:DisassociateIamInstanceProfile
+                    - ec2:DisassociateIamInstanceProfile
                     - ec2:AssociateIamInstanceProfile
                     Resource: arn:aws:ec2:us-east-1:*:*
                     Condition:
@@ -140,13 +140,52 @@ Resources:
                     - sts:AssumeRoleWithSAML 
                     Effect: Allow
                     Resource: arn:aws:iam::*:*
-
-
                 -    
-                    Action: 
-                    - eks:*    
+                    Action:
+                    - elasticache:AddTagsToResource
+                    - elasticache:CreateCacheCluster
+                    - elasticache:CreateCacheParameterGroup
+                    - elasticache:CreateCacheSecurityGroup
+                    - elasticache:CreateCacheSubnetGroup
+                    - elasticache:CreateReplicationGroup
+                    - elasticache:CreateSnapshot
+                    - elasticache:DescribeSnapshots
+                    - elasticache:IncreaseReplicaCount
+                    - elasticache:ModifyCacheCluster
+                    - elasticache:ModifyCacheSubnetGroup
+                    - elasticache:ModifyReplicationGroup
+                    - elasticache:DeleteCacheCluster
+                    - elasticache:DeleteReplicationGroup
+                    - elasticache:DeleteSnapshot 
                     Effect: Allow
-                    Resource: arn:aws:eks:us-east-1:*:*
+                    Resource: "*"
+                -    
+                    Action:
+                    - ecs:CreateCluster
+                    - ecs:CreateService
+                    - ecs:CreateTaskSet
+                    - ecs:DeregisterContainerInstance
+                    - ecs:DeregisterTaskDefinition
+                    - ecs:DescribeClusters
+                    - ecs:ListClusters
+                    - ecs:ListContainerInstances
+                    - ecs:ListServices
+                    - ecs:ListTaskDefinitions
+                    - ecs:ListTasks
+                    - ecs:RegisterContainerInstance
+                    - ecs:RegisterTaskDefinition
+                    - ecs:RunTask
+                    - ecs:StartTask
+                    - ecs:StopTask
+                    - ecs:UpdateService
+                    - ecs:UpdateTaskSet
+                    - ecs:DeleteAttributes
+                    - ecs:DeleteCluster
+                    - ecs:DeleteService
+                    - ecs:DeleteTaskSet  
+                    Effect: Allow
+                    Resource: arn:aws:ecs:us-east-1:*:*
+
                 -    
                     Action:
                     - rds:AddRoleToDBCluster
